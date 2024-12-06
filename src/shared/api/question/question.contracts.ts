@@ -21,7 +21,7 @@ export const QuestionDtoSchema = z.object({
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   viewCount: z.number(),
-  commentCount: z.number(),
+  answerCount: z.number(),
   upvoteCount: z.number(),
   downvoteCount: z.number(),
   isUpvoted: z.boolean(),
@@ -41,20 +41,16 @@ export const UpdateQuestionDtoSchema = z.object({
   tags: z.array(z.string()).default([]),
 })
 
-const FilterParamsDtoSchema = z.object({
-  filterBy: z.array(z.string()),
+export const QuestionQueryDtoSchema = z.object({
+  sortBy: z
+    .union([
+      z.literal('newest'),
+      z.literal('active'),
+      z.literal('bountied'),
+      z.literal('unanswered'),
+    ])
+    .optional(),
+  tag: z.array(z.string()).optional(),
+  cursor: z.number().default(-1),
+  size: z.number().default(20),
 })
-
-const SortParamsDtoSchema = z.object({
-  sortBy: z.array(z.string()),
-})
-
-const TagParamsDtoSchema = z.object({
-  taggedWith: z.array(z.string()),
-})
-
-export const QuestionQueryDtoSchema = z.intersection(
-  FilterParamsDtoSchema,
-  SortParamsDtoSchema,
-  TagParamsDtoSchema,
-)
